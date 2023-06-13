@@ -1,5 +1,22 @@
 /* ここに記載する */
-
+.cybozu{
+  width: 80%;
+  display:block;
+  margin: auto;
+  padding: 2vh 0 2vh 0;
+}
+.kintone{
+  background-color: #ffbf00;
+}
+.Office{
+  background-color: #1992d4;
+}
+.Garoon{
+  background-color: #003399;
+}
+.Mailwise{
+  background-color: #df4356;
+}
 /* 以下は修正しない */
 html,
 body {
@@ -30,22 +47,4 @@ header h2 {
   padding: 6px 0 0 0;
   font-size: 14px;
   font-weight: 400;
-}
-.cybozu{
-  width: 80%;
-  display:block;
-  margin: auto;
-  padding: 2vh 0 2vh 0;
-}
-.kintone{
-  background-color: #ffbf00;
-}
-.Office{
-  background-color: #1992d4;
-}
-.Garoon{
-  background-color: #003399;
-}
-.Mailwise{
-  background-color: #df4356;
 }
