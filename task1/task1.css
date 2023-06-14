@@ -1,22 +1,31 @@
 /* ここに記載する */
+.main{
+  width: 100%;
+  text-align: center;
+}
 .cybozu{
   width: 80%;
-  display:block;
-  margin: auto;
-  padding: 2vh 0 2vh 0;
+  /* margin: auto; */
+  /* padding: 2vh 0 2vh 0; */
+  margin: 1%;
 }
+
 .kintone{
   background-color: #ffbf00;
 }
+
 .Office{
   background-color: #1992d4;
 }
+
 .Garoon{
   background-color: #003399;
 }
+
 .Mailwise{
   background-color: #df4356;
 }
+
 /* 以下は修正しない */
 html,
 body {
