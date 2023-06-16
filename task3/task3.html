@@ -94,6 +94,8 @@ li {
   'use strict';
 
   const fileManage = {
+  
+const fileManage = {
   f001: {
     folderName: '情報システム部',
     viewAuth: 'Everyone',
@@ -116,11 +118,12 @@ li {
 console.log(fileManage);
 
 Object.keys(fileManage).forEach((val) => {
-
   Object.keys(fileManage[val]).forEach((dataKey) => {
     document.getElementById(val + '-' + dataKey).textContent = fileManage[val][dataKey];
     if (fileManage[val][dataKey] === 'Everyone') {
-      document.getElementById('list').innerHTML += `<li>${fileManage[val].folderName}</li>`;
+      const li = document.createElement('li');
+      document.getElementById('list').appendChild(li);
+      li.textContent = fileManage[val].folderName;
     }
   });
 });
