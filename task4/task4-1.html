@@ -52,23 +52,23 @@ header h2 {
 </main>
 <script> 
 const checkArray = document.getElementsByClassName('chk');
-const chk0 = checkArray[0];
-const chk1 = checkArray[1];
+const secureOption = checkArray[0];
+const addDisk = checkArray[1];
 let totalOption = 0;
 
-chk0.onclick = () => {
-  if (chk0.checked === true) {
-    totalOption += Number(chk0.value);
-  } else if (chk0.checked === false) {
-    totalOption -= Number(chk0.value);
+secureOption.onclick = () => {
+  if (secureOption.checked) {
+    totalOption += Number(secureOption.value);
+  } else {
+    totalOption -= Number(secureOption.value);
   }
   document.getElementById('price').textContent = 3900 + totalOption;
 };
-chk1.onclick = () => {
-  if (chk1.checked === true) {
-    totalOption += Number(chk1.value);
-  } else if (chk1.checked === false) {
-    totalOption -= Number(chk1.value);
+addDisk.onclick = () => {
+  if (addDisk.checked) {
+    totalOption += Number(addDisk.value);
+  } else {
+    totalOption -= Number(addDisk.value);
   }
   document.getElementById('price').textContent = 3900 + totalOption;
 };
