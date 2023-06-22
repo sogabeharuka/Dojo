@@ -1,49 +1,49 @@
 (() => {
-    'use strict';
-  
-    kintone.events.on('app.record.create.show', (event) => {
-      console.log(event);
-      //const action5Array = ['あくなき探求', '不屈の心体', '理想への共感', '心を動かす', '知識を増やす', '公明正大'];
-      
-      const getAPI = async () => {
-        const params = {
-          app: 14,
-        }
-        //console.log(resp);
+  'use strict';
+    
+  const getAPI = async () => {
+    const params = {
+      app: 14,
+    }
+    
+    const resp = await kintone.api(kintone.api.url('/k/v1/app/form/fields.json',true),'GET',params);
+    const action5 =[]
+    const options = resp.properties.Table.fields.Action5.options
+    for (const element of Object.keys(options)) {
+      const num = options[element].index;
+      action5[num] = [element];
+      }
+    return action5;
+  };
+
+  const insertTable = (event, action5Array) => {
+    const subtableArray = event.record.Table.value;
+    subtableArray.shift();
         
-        const resp = await kintone.api(kintone.api.url('/k/v1/app/form/fields.json',true),'GET',params);
-        const Action5 = Object.keys(resp.properties.Table.fields.Action5.options);
-        console.log(Action5);
-        
-        //const record = event.record;
-        const subtableArray = event.record.Table.value;
-        subtableArray.shift();
-        
-        console.log(subtableArray);
-        
-        Action5.forEach((element) => {
-          subtableArray.push(
-            {
-              value: {
-                Action5: {
-                  type: 'DROP_DOWN',
-                  value: element
-                },
-                状況: {
-                  type: 'DROP_DOWN',
-                  value: ['未振り返り']
-                },
-                課題: {
-                  type: 'MULTI_LINE_TEXT',
-                  value: ''
-                }
-              }  
-            });
-            
-          });
-        };
-        getAPI();
-        
-        return event;
-      });
-  })();
+    action5Array.forEach((element) => {
+      subtableArray.push(
+        {
+          value: {
+            Action5: {
+              type: 'DROP_DOWN',
+              value: element
+            },
+            状況: {
+              type: 'DROP_DOWN',
+              value: ['未振り返り']
+            },
+            課題: {
+              type: 'MULTI_LINE_TEXT',
+              value: ''
+            }
+          }  
+        });
+      });  
+    }
+
+  kintone.events.on('app.record.create.show', async (event) => {
+    const data = await getAPI();
+    insertTable(event, data);
+    return event;
+  });
+})();
