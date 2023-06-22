@@ -75,20 +75,15 @@ const select0 = selectArray[0];
 const select1 = selectArray[1];
 
 document.getElementById('btn').onclick = () => {
-  let secureOption = 0;
-  let addDisk = 0;
+  let standardOPtion = 3900;
 
   if (chk0.checked === true) {
-    secureOption += Number(chk0.value) * Number(select0.value);
-  } else if (chk0.checked === false) {
-    secureOption = 0;
+    standardOPtion += Number(chk0.value) * Number(select0.value);
   }
   if (chk1.checked === true) {
-    addDisk += Number(chk1.value) * Number(select1.value);
-  } else if (chk1.checked === false) {
-    addDisk = 0;
-  }
-  document.getElementById('price').textContent = 3900 + secureOption + addDisk;
+    standardOPtion += Number(chk1.value) * Number(select1.value);
+  } 
+  document.getElementById('price').textContent = standardOPtion;
 };
 </script>
 </body>
