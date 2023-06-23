@@ -21,11 +21,13 @@
           return 'OF';
         case 'Mailwise':
           return 'MW';
+        default:
+          return '';
       }
     };
     const dataFormat = dateFns.format(event.record.日付.value, 'YYYYMMDD');
-    const identifyNum = event.record.管理番号.value ? event.record.管理番号.value:'';
     const productId = getSelectedProductName(event.record.サイボウズ製品.value);
+    const identifyNum = event.record.管理番号.value ? event.record.管理番号.value:'';
     event.record.重複禁止項目_文字列.value = `${dataFormat}-${productId}-${identifyNum}`;
     return event;
   });
