@@ -21,8 +21,8 @@
       return event;
     }
     //それ以外のときダイアログ表示
-    const dialog = confirm('レコードが重複しています。このまま保存しますか？');
-    if (dialog) {
+    const isDialogOpen = confirm('レコードが重複しています。このまま保存しますか？');
+    if (isDialogOpen) {
       return event;
     } else {
       return false;
