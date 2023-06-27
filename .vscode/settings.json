@@ -1,0 +1,7 @@
+{
+    "liveServer.settings.https": {
+        "cert": "/Users/h002720/Downloads/localhost+2.pem",
+        "key": "/Users/h002720/Downloads/localhost+2-key.pem",
+        "passphrase": "””"
+    }
+}
