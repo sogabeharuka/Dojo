@@ -15,16 +15,17 @@
     };
 
     const resp = await kintone.api(kintone.api.url('/k/v1/records.json', true), 'GET', params);
+    
+    //重複していないときレコード保存
     if (resp.records.length === 0) {
-    //OKならレコードを保存
+      return event;
+    }
+    //それ以外のときダイアログ表示
+    const dialog = confirm('レコードが重複しています。このまま保存しますか？');
+    if (dialog) {
       return event;
     } else {
-    //キャンセルなら保存操作を取り消して編集画面に戻る
-      if (window.confirm('レコードが重複しています。このまま保存しますか？')) {
-        return event;
-      } else {
-        return false;
-      }
+      return false;
     }
   });
 })();
