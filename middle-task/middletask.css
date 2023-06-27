@@ -28,11 +28,11 @@ html, body {
     font-weight: 400;
     }
     #table-news { 
-        /* border: 1px solid; */
         border-collapse: collapse;
     }
-    #table-news tr,th {
+    #table-news tr,th,td{
         border: 1px solid #000;
+        text-align: center;
     }
     
 
