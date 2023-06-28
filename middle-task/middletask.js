@@ -20,13 +20,13 @@
       }
     };
   
-    const createTable = (tableData) => {
+    const createTable = (tableData, targetTable) => {
       tableData.forEach(element => {
-        const firstRow = tableElement.insertRow(tableElement.rows.length);
+        const firstRow = targetTable.insertRow(targetTable.rows.length);
   
-        const dateCell = firstRow.insertCell(0);
-        const categoryCell = firstRow.insertCell(1);
-        const titledCell = firstRow.insertCell(2);
+        const dateCell = firstRow.insertCell();
+        const categoryCell = firstRow.insertCell();
+        const titledCell = firstRow.insertCell();
         dateCell.textContent = element.day.value;
   
         const categoryType = element.category.value;
@@ -35,13 +35,12 @@
         categoryCell.style.backgroundColor = addCategoryBackgroundColor(categoryType);
   
         const titled = document.createElement('a');
-        const createText = document.createTextNode(element.content.value);
+        titled.textContent = element.content.value;
         titled.href = element.url.value;
         titled.target = element.target.value;
-        titled.appendChild(createText);
         titledCell.appendChild(titled);
       });
     };
     const data = await fetchAdress();
-    createTable(data);
+    createTable(data, tableElement);
   })();
