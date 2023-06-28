@@ -9,21 +9,21 @@
       const jsonData = await apiUrl.json();
       return jsonData;
     };
-  
+    
     const addCategoryBackgroundColor = (categoryType) => {
-      if (categoryType === '企業情報') {
-        return '#87cefa';
-      } else if (categoryType === '製品') {
-        return '#7fffd4';
-      } else {
-        return '#ff6347';
-      }
+        if (categoryType === '企業情報') {
+            return '#87cefa';
+        } else if (categoryType === '製品') {
+            return '#7fffd4';
+        } else {
+            return '#ff6347';
+        }
     };
-  
     const createTable = (tableData) => {
-      tableData.forEach(element => {
-        const rowCownt = tableElement.rows.length;
-        const firstRow = tableElement.insertRow(rowCownt);
+        tableData.forEach(element => {
+            const rowCownt = tableElement.rows.length;
+            const firstRow = tableElement.insertRow(rowCownt);
+            console.log(tableData);
   
         const dateCell = firstRow.insertCell(0);
         const categoryCell = firstRow.insertCell(1);
