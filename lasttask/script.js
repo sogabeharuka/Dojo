@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const bodyForStart = {
+  const bodyTemplate = {
     app: '',
     updateKey: {
       field: "ログインID",
@@ -19,27 +19,9 @@
               日付: {
                 value: ''
               },          
-            }
-          }
-        ]
-      }
-    }
-  };
-  const bodyForEnd = {
-    app: '',
-    updateKey: {
-      field: "ログインID",
-      value: ''
-    },
-    record: {
-      table: {
-        value:[
-          {
-            id: '',
-            value: {
               退勤時間: {
                 value: ''
-              }, 
+              },          
             }
           }
         ]
@@ -78,38 +60,97 @@
     //   const dateTime = getTime();
     //   console.log(dateTime);
     // };
-   function createBody(fieldcode){
-     const bodyTemplate = fieldcode==="出勤時間"?bodyForStart:bodyForEnd; 
-     const body = JSON.parse(JSON.stringify(bodyTemplate));  
-     body.app = 24;
-     body.id = kintone.mobile.app.record.getId();
-     return body;
+    async function getRecord(appId, query){
+      const params = {
+        app: appId,
+        query: query
+      };
+      const resp = await kintone.api(kintone.api.url('/k/v1/records.json', true), 'GET', params);   
+      console.log(resp);
+      return resp;
+    };
+
+    async function createNewBody(appId, loginUserId, fieldcode, currentTime) {
+      const query = `ログインID = "${loginUserId}"`
+      const currentBody = await getRecord(appId, query);
+      const newbody = JSON.parse(JSON.stringify(bodyTemplate));
+      console.log(newbody);
+      
+      // 用意したappID, loginUserId Record情報をnewBodyに詰めてあげる
+      // appID, loginUserId詰める作業
+      newbody.app = appId;
+      newbody.updateKey.value = loginUserId;
+      
+      // record情報を詰める作業
+      // 用意したcurrentBodyを雛形(newbody)に入れる
+      newbody.record.table.value[0].value.出勤時間.value = currentBody.records[0].table.value[0].value.出勤時間.value;
+      newbody.record.table.value[0].value.日付.value = currentBody.records[0].table.value[0].value.日付.value;
+      newbody.record.table.value[0].value.退勤時間.value = currentBody.records[0].table.value[0].value.退勤時間.value;
+      // currentTimeをnewbodyの出勤時間に入れる
+      newbody.record.table.value[0].value[fieldcode].value = currentTime;
+      return newbody;
     }
     
     async function getStartTime() {
+      const appId = kintone.mobile.app.getId();
+      const loginUserId = kintone.getLoginUser().code;
       const fieldcode = '出勤時間';
-      const [date, currentTime] = getTime();
+      const [currentDate, currentTime] = getTime();
+      const query = `日付 in ("${currentDate}") and ログインID = "${loginUserId}"`;
+     
+      // TODO: 日付(currentDate)と一致するレコードのテーブルを取得
+      const records = await getRecord(appId, query);
+      console.log(records)
+
+      // TODO: 一致するテーブルが存在する時、出勤時間を更新する
+      // TODO: 一致するテーブルが存在しない時、テーブルを追加し、出勤時間を書き込む
       
-      const body = createBody(fieldcode);
-      body.record.table.value[0].id = 275;
-      body.record.table.value[0].value.出勤時間.value = currentTime;
-      body.record.table.value[0].value.日付.value = date;
-      body.updateKey.value = kintone.getLoginUser().code;
-      
-      console.log(body);
-      await kintone.api(kintone.api.url('/k/v1/record.json', true), 'PUT', body);    
+      if (records != null){
+        const newbody = await createNewBody(appId, loginUserId, fieldcode, currentTime);  
+      } else {
+        const addRow = () => {
+          const record = kintone.app.record.get().record;
+          // まずはオブジェクトを作る
+          const newTableRow = record.table.value[0];
+          
+          // オブジェクトをBodyにPUSHする
+          newBody.table.value.push(newTableRow); 
+          newTableRow.push({
+            value: {
+              '休憩時間': {
+                value: '',
+                type: 'TIME',
+              },
+              '出勤時間': {
+                value: currentTime,
+                type: 'TIME',
+              },
+              '勤務時間': {
+                value: '',
+                type: 'CALC',
+              },
+              '日付': {
+                value: currentDate,
+                type: 'DATE',
+              },
+              '退勤時間': {
+                value: '',
+                type: 'TIME',
+              },
+            }
+          });
+          resetRowNo(record);
+          kintone.app.record.set({record: record});
+        };
+      }
+      await kintone.api(kintone.api.url('/k/v1/record.json', true), 'PUT', newbody);    
     };
     
     async function getEndTime(){
-      const [date, currentTime] = getTime();
       const fieldcode = '退勤時間';
-      
-      const body = createBody(fieldcode);
-      body.record.table.value[0].id = 275;
-      body.record.table.value[0].value.退勤時間.value = currentTime;
-      body.updateKey.value = kintone.getLoginUser().code;
-      await kintone.api(kintone.api.url('/k/v1/record.json', true), 'PUT', body);    
-
+      const [date, currentTime] = getTime();
+      const newbody = await createNewBody(appId, loginUserId, fieldcode, currentTime); 
+      await kintone.api(kintone.api.url('/k/v1/record.json', true), 'PUT', newbody);      
     };
   
     // run getCurrentTime when buttons clicked
