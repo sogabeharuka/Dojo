@@ -10,5 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@kintone/rest-api-client": "^4.0.3"
+  },
+  "devDependencies": {
+    "@cybozu/eslint-config": "^21.0.0",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0"
   }
 }
